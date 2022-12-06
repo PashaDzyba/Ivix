@@ -24,8 +24,8 @@ def get_all_pages():
 
     req = requests.get(url="https://www.yelp.com/search?cflt=contractors&find_loc=San+Francisco%2C+CA", headers=headers)
 
-    if not os.path.exists("pages_data"):
-        os.mkdir("pages_data")
+    if not os.path.exists("data"):
+        os.mkdir("data")
 
     with open("data/yelp.html", 'w') as file:
         file.write(req.text)
