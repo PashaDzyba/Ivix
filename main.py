@@ -58,7 +58,7 @@ def get_all_pages():
 
 def collect_data(pages_count):
     """This function collects all of the data and saves it in json file"""
-    for page in range(1, pages_count):
+    for page in range(2, 5):
         with open(f"data/yelp_page{page}.html") as file:
             src = file.read()
 
@@ -95,16 +95,24 @@ def collect_data(pages_count):
             main_table = soup.find("div", class_="margin-t3__09f24__riq4X margin-b6__09f24__wgl48 "
                                                  "border-color--default__09f24__NPAKY")
             print(main_table)
-            business_name = main_table.find("div", class_="margin-b1__09f24__vaLrm border-color--default__09f24__NPAKY") \
-                .find('h1').text
-            business_rating = main_table.find("div", class_="five-stars__09f24__mBKym five-stars--large__09f24__Waiqf "
-                                                            "display--inline-block__09f24__fEDiJ "
-                                                            "border-color--default__09f24__NPAKY")['aria-label']
-
-            number_of_reviews = main_table.find("div",
-                                                class_="arrange-unit__09f24__rqHTg arrange-unit-fill__09f24__CUubG"
-                                                       " border-color--default__09f24__NPAKY nowrap__09f24__lBkC2"). \
-                find("a").text
+            try:
+                business_name = main_table.find("div", class_="margin-b1__09f24__vaLrm border-color--default__09f24__NPAKY") \
+                    .find('h1').text
+            except Exception:
+                business_name = "No business name"
+            try:
+                business_rating = main_table.find("div", class_="five-stars__09f24__mBKym five-stars--large__09f24__Waiqf "
+                                                                "display--inline-block__09f24__fEDiJ "
+                                                                "border-color--default__09f24__NPAKY")['aria-label']
+            except Exception:
+                business_rating = "No business rating"
+            try:
+                number_of_reviews = main_table.find("div",
+                                                    class_="arrange-unit__09f24__rqHTg arrange-unit-fill__09f24__CUubG"
+                                                           " border-color--default__09f24__NPAKY nowrap__09f24__lBkC2"). \
+                    find("a").text
+            except Exception:
+                number_of_reviews = "No number of reviews"
             try:
                 business_url = main_table.find("div",
                                                class_="css-xp8w2v"). \
@@ -116,12 +124,21 @@ def collect_data(pages_count):
 
             review_data = []
             for reviews in reviews_table:
-                reviewer_name = reviews.find('div', class_="user-passport-info"). \
-                    find("span", class_="fs-block css-ux5mu6").text
-                reviewer_location = reviews.find("div", class_="responsive-hidden-small__09f24__qQFtj"). \
-                    find("span", class_='css-qgunke').text
-                reviewer_date = reviews.find("div", class_="margin-t1__09f24__w96jn"). \
-                    find('div', class_="arrange__09f24__LDfbs").find('span', class_="css-chan6m").text
+                try:
+                    reviewer_name = reviews.find('div', class_="user-passport-info"). \
+                        find("span", class_="fs-block css-ux5mu6").text
+                except Exception:
+                    reviewer_name = "No reviewer name"
+                try:
+                    reviewer_location = reviews.find("div", class_="responsive-hidden-small__09f24__qQFtj"). \
+                        find("span", class_='css-qgunke').text
+                except Exception:
+                    reviewer_location = "No reviewer location"
+                try:
+                    reviewer_date = reviews.find("div", class_="margin-t1__09f24__w96jn"). \
+                        find('div', class_="arrange__09f24__LDfbs").find('span', class_="css-chan6m").text
+                except Exception:
+                    reviewer_date = "No reviewer date"
                 review_data.append({
                     "reviewer_name": reviewer_name,
                     "reviewer_location": reviewer_location,
@@ -141,9 +158,7 @@ def collect_data(pages_count):
             json.dump(project_data_list, file, indent=4, ensure_ascii=False)
 
         # Last block of code will remove all files in page_data directory
-        directory = '/pages_data'
-        for f in os.listdir(directory):
-            os.remove(os.path.join(directory, f))
+
 
 
 def main():
