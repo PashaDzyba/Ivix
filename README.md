@@ -1,0 +1,1 @@
+Just start the script and everything will do automatically

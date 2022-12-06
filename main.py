@@ -5,6 +5,7 @@ import time
 import requests
 from bs4 import BeautifulSoup
 
+
 headers = {
     "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,"
               "image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
@@ -21,13 +22,13 @@ def get_all_pages():
 
     # This lines of code is only to save data on local machine for easier usage
 
-    # req = requests.get(url="https://www.yelp.com/search?cflt=contractors&find_loc=San+Francisco%2C+CA", headers=headers)
-    #
-    # if not os.path.exists("pages_data"):
-    #     os.mkdir("pages_data")
-    #
-    # with open("data/yelp.html", 'w') as file:
-    #     file.write(req.text)
+    req = requests.get(url="https://www.yelp.com/search?cflt=contractors&find_loc=San+Francisco%2C+CA", headers=headers)
+
+    if not os.path.exists("pages_data"):
+        os.mkdir("pages_data")
+
+    with open("data/yelp.html", 'w') as file:
+        file.write(req.text)
 
     with open("data/yelp.html") as file:
         src = file.read()
